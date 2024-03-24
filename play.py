@@ -3,6 +3,7 @@ from tkinter import ttk
 import random
 import subprocess
 
+# Константы
 WIDTH = 1400
 HEIGHT = 800
 SPEED = 100
@@ -11,6 +12,12 @@ BODY_SIZE = 3
 SNAKE = "#F0FFFF"
 FOOD = "#00BFFF"
 BACKGROUND = "#87CEEB"
+BOMB = "#B22222"
+
+
+# Значения по умолчанию
+score = 0
+direction = 'down'
 
 
 class Snake:
@@ -26,9 +33,10 @@ class Snake:
 			square = area.create_rectangle(x, y, x + SPACE_SIZE, y + SPACE_SIZE, fill=SNAKE, tag="snake")
 			self.squares.append(square)
 
+
 class Food:
 	def __init__(self):
-		x = random.randint(0, (WIDTH / SPACE_SIZE)-1) * SPACE_SIZE
+		x = random.randint(0, (WIDTH / SPACE_SIZE) - 1) * SPACE_SIZE
 		y = random.randint(0, (HEIGHT / SPACE_SIZE) - 1) * SPACE_SIZE
 
 		self.coordinates = [x, y]
@@ -70,6 +78,7 @@ def next_turn(snake, food):
 	else:
 		window.after(SPEED, next_turn, snake, food)
 
+
 def change_direction(new_direction):
 
 	global direction
@@ -87,6 +96,7 @@ def change_direction(new_direction):
 		if direction != 'up':
 			direction = new_direction
 
+
 def check_collisions(snake):
 
 	x, y = snake.coordinates[0]
@@ -102,9 +112,10 @@ def check_collisions(snake):
 
 	return False
 
+
 def game_over():
 	area.delete(ALL)
-	area.create_text(area.winfo_width()/2, area.winfo_height()/2, font=('Segoe print', 70), text="Игра окончена", fill="red", tag="gameover")
+	area.create_text(area.winfo_width() / 2, area.winfo_height() / 2, font=('Segoe print', 70), text="Игра окончена", fill="red", tag="gameover")
 
 def go_back():
 	window.destroy()
@@ -113,6 +124,7 @@ def go_back():
 def restart_game():
 	window.destroy()
 	subprocess.Popen(["python", "play.py"])
+
 
 if __name__ == '__main__':
 
@@ -123,9 +135,6 @@ if __name__ == '__main__':
 
 	for widget in window.winfo_children():
 		widget.destroy()
-
-	score = 0
-	direction = 'down'
 
 	counter = Label(window, text="Счёт: {}".format(score), font=('Segoe print', 20), background='#F0F8FF')
 	counter.pack(anchor='ne')
@@ -138,18 +147,6 @@ if __name__ == '__main__':
 
 	restart_btn = ttk.Button(window, text='↻', command=restart_game)
 	restart_btn.place(x=130, y=20, anchor="c", width=80, height=40)
-
-	window.update()
-
-	window_width = window.winfo_width()
-	window_height = window.winfo_height()
-	screen_width = window.winfo_screenwidth()
-	screen_height = window.winfo_screenheight()
-
-	x = int((screen_width / 2) - (window_width / 2))
-	y = int((screen_height / 2) - (window_height / 2))
-
-	window.geometry(f"{window_width}x{window_height}+{x}+{y}")
 
 	window.bind('<Left>', lambda event: change_direction('left'))
 	window.bind('<Right>', lambda event: change_direction('right'))
