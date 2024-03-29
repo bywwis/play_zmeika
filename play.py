@@ -43,7 +43,18 @@ class Food:
 
 		area.create_oval(x, y, x + SPACE_SIZE, y + SPACE_SIZE, fill=FOOD, tag="food")
 
-def next_turn(snake, food):
+
+class Bomb:
+	def __init__(self):
+		x = random.randint(0, (WIDTH / SPACE_SIZE) - 1) * SPACE_SIZE
+		y = random.randint(0, (HEIGHT / SPACE_SIZE) - 1) * SPACE_SIZE
+
+		self.coordinates = [x, y]
+
+		area.create_oval(x, y, x - SPACE_SIZE, y - SPACE_SIZE, fill='red', tag="bomb")
+
+
+def next_turn(snake, food, bomb):
 
 	x, y = snake.coordinates[0]
 
@@ -73,10 +84,10 @@ def next_turn(snake, food):
 		area.delete(snake.squares[-1])
 		del snake.squares[-1]
 
-	if check_collisions(snake):
+	if check_collisions(snake, bomb):
 		game_over()
 	else:
-		window.after(SPEED, next_turn, snake, food)
+		window.after(SPEED, next_turn, snake, food, bomb)
 
 
 def change_direction(new_direction):
@@ -97,7 +108,7 @@ def change_direction(new_direction):
 			direction = new_direction
 
 
-def check_collisions(snake):
+def check_collisions(snake, bomb):
 
 	x, y = snake.coordinates[0]
 
@@ -110,8 +121,12 @@ def check_collisions(snake):
 		if x == body_part[0] and y == body_part[1]:
 			return True
 
-	return False
+	if x == bomb.coordinates[0] or y == bomb.coordinates[1]:
+		return True
+	else:
+		return False
 
+	return False
 
 def game_over():
 	area.delete(ALL)
@@ -136,7 +151,7 @@ if __name__ == '__main__':
 	for widget in window.winfo_children():
 		widget.destroy()
 
-	counter = Label(window, text="Счёт: {}".format(score), font=('Segoe print', 20), background='#F0F8FF')
+	counter = ttk.Label(window, text="Счёт: {}".format(score), font=('Segoe print', 20), background='#F0F8FF')
 	counter.pack(anchor='ne')
 
 	area = Canvas(window, bg=BACKGROUND, height=HEIGHT, width=WIDTH)
@@ -155,9 +170,8 @@ if __name__ == '__main__':
 
 	snake = Snake()
 	food = Food()
+	bomb = Bomb()
 
-	next_turn(snake, food)
+	next_turn(snake, food, bomb)
 
 	window.mainloop()
-
-

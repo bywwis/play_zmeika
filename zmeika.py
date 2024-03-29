@@ -1,26 +1,30 @@
 from tkinter import *
 from tkinter import ttk
-from subprocess import call
+import subprocess
+
 
 # Кнопка "Правила"
 def clicked_rules_btn():
-
+    # Кнопка для возвращения в меню из окна "Правила"
     def go_back_rules():
         window_rules.destroy()
         window_menu.deiconify()
 
-
+    # Настройка окна "Правила"
     window_rules = Tk()
     window_rules.title("Правила игры")
     window_rules.geometry('1920x1080')
     window_rules.attributes('-fullscreen', True)
     window_rules.configure(bg='#F0F8FF')
 
+    # Стиль для кнопок в окне "Правила"
     ttk.Style().configure("TButton", font=("Segoe print", 26), background="#F0F8FF", foreground="#87CEEB")
 
     for widget in window_rules.winfo_children():
         widget.destroy()
 
+    # Содержимое окна "Правила"
+    # Вставить изобрадение с правилами из фигмы
     title_rules = Label(window_rules, text="Правила игры", font=("Segoe print", 50), foreground='#87CEEB', background='#F0F8FF')
     title_rules.place(relx=0.5, rely=0.2, anchor="c")
 
@@ -66,13 +70,12 @@ def clicked_rules_btn():
 
 # Кнопка "Выход"
 def clicked_exit_btn():
-    window_menu.destroy()
+    exit()
 
 # Кнопка "Играть"
-#def clicked_play_btn():
-    #window_menu.withdraw()
-    #call(["python", "play.py"])
-
+def clicked_play_btn():
+    window_menu.quit()
+    subprocess.Popen(["python", "play.py"])
 
 
 if __name__ == '__main__':
@@ -84,15 +87,17 @@ if __name__ == '__main__':
     window_menu.attributes('-fullscreen', True)
     window_menu.configure(bg='#F0F8FF')
 
+    # Стиль для кнопок в окне "Меню"
     ttk.Style().configure("TButton", font=("Segoe print", 26), background="#F0F8FF", foreground="#87CEEB")
 
     for widget in window_menu.winfo_children():
         widget.destroy()
 
+    # Содержимое окна "Меню"
     title = ttk.Label(window_menu, text="Меню", font=("Segoe print", 100), foreground="#87CEEB", background='#F0F8FF')
     title.place(relx=0.5, rely=0.2, anchor="c")
 
-    play_btn = ttk.Button(text="Играть")
+    play_btn = ttk.Button(text="Играть", command=clicked_play_btn)
     play_btn.place(relx=0.5, rely=0.4, anchor="c", width=200, height=70)
     play_btn.configure()
 
