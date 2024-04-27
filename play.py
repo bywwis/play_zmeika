@@ -1,9 +1,8 @@
 from tkinter import *
 from tkinter import ttk
 import random
-import subprocess
+import os
 
-# Константы
 WIDTH = 1400
 HEIGHT = 800
 SPEED = 100
@@ -15,7 +14,6 @@ BACKGROUND = "#87CEEB"
 BOMB = "#B22222"
 
 
-# Значения по умолчанию
 score = 0
 direction = 'down'
 
@@ -27,7 +25,7 @@ class Snake:
 		self.squares = []
 
 		for i in range(0, BODY_SIZE):
-			self.coordinates.append([0, 0])
+			self.coordinates.append([100, 100])
 
 		for x, y in self.coordinates:
 			square = area.create_rectangle(x, y, x + SPACE_SIZE, y + SPACE_SIZE, fill=SNAKE, tag="snake")
@@ -44,17 +42,7 @@ class Food:
 		area.create_oval(x, y, x + SPACE_SIZE, y + SPACE_SIZE, fill=FOOD, tag="food")
 
 
-class Bomb:
-	def __init__(self):
-		x = random.randint(0, (WIDTH / SPACE_SIZE) - 1) * SPACE_SIZE
-		y = random.randint(0, (HEIGHT / SPACE_SIZE) - 1) * SPACE_SIZE
-
-		self.coordinates = [x, y]
-
-		area.create_oval(x, y, x - SPACE_SIZE, y - SPACE_SIZE, fill='red', tag="bomb")
-
-
-def next_turn(snake, food, bomb):
+def next_turn(snake, food):
 
 	x, y = snake.coordinates[0]
 
@@ -84,10 +72,10 @@ def next_turn(snake, food, bomb):
 		area.delete(snake.squares[-1])
 		del snake.squares[-1]
 
-	if check_collisions(snake, bomb):
+	if check_collisions(snake):
 		game_over()
 	else:
-		window.after(SPEED, next_turn, snake, food, bomb)
+		window.after(SPEED, next_turn, snake, food)
 
 
 def change_direction(new_direction):
@@ -108,7 +96,7 @@ def change_direction(new_direction):
 			direction = new_direction
 
 
-def check_collisions(snake, bomb):
+def check_collisions(snake):
 
 	x, y = snake.coordinates[0]
 
@@ -121,37 +109,33 @@ def check_collisions(snake, bomb):
 		if x == body_part[0] and y == body_part[1]:
 			return True
 
-	if x == bomb.coordinates[0] or y == bomb.coordinates[1]:
-		return True
-	else:
-		return False
-
 	return False
+
 
 def game_over():
 	area.delete(ALL)
 	area.create_text(area.winfo_width() / 2, area.winfo_height() / 2, font=('Segoe print', 70), text="Игра окончена", fill="red", tag="gameover")
 
+
 def go_back():
-	window.destroy()
-	subprocess.Popen(["python", "zmeika.py"])
+	os.system('python menu.py')
+	exit(window)
+
 
 def restart_game():
-	window.destroy()
-	subprocess.Popen(["python", "play.py"])
+	os.system('python play.py')
+	exit(window)
 
 
 if __name__ == '__main__':
 
 	window = Tk()
 	window.title("Змейка")
+	window.geometry('1920x1080')
 	window.configure(bg='#F0F8FF')
 	window.attributes('-fullscreen', True)
 
-	for widget in window.winfo_children():
-		widget.destroy()
-
-	counter = ttk.Label(window, text="Счёт: {}".format(score), font=('Segoe print', 20), background='#F0F8FF')
+	counter = Label(window, text="Счёт: {}".format(score), font=('Segoe print', 20), background='#F0F8FF')
 	counter.pack(anchor='ne')
 
 	area = Canvas(window, bg=BACKGROUND, height=HEIGHT, width=WIDTH)
@@ -170,8 +154,7 @@ if __name__ == '__main__':
 
 	snake = Snake()
 	food = Food()
-	bomb = Bomb()
 
-	next_turn(snake, food, bomb)
+	next_turn(snake, food)
 
 	window.mainloop()
