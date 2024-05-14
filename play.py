@@ -42,6 +42,15 @@ class Food:
 		area.create_oval(x, y, x + SPACE_SIZE, y + SPACE_SIZE, fill=FOOD, tag="food")
 
 
+class Bomb:
+	def __init__(self):
+		x = random.randint(0, (WIDTH / SPACE_SIZE) - 1) * SPACE_SIZE
+		y = random.randint(0, (HEIGHT / SPACE_SIZE) - 1) * SPACE_SIZE
+
+		self.coordinates = [x, y]
+
+		area.create_oval(x, y, x + SPACE_SIZE, y + SPACE_SIZE, fill='red', tag="bomb")
+
 def next_turn(snake, food):
 
 	x, y = snake.coordinates[0]
@@ -66,13 +75,14 @@ def next_turn(snake, food):
 		counter.config(text="Счёт: {}".format(score))
 		area.delete("food")
 		food = Food()
+		Bomb()
 
 	else:
 		del snake.coordinates[-1]
 		area.delete(snake.squares[-1])
 		del snake.squares[-1]
 
-	if check_collisions(snake):
+	if check_collisions(snake) or (x == bomb.coordinates[0] and y == bomb.coordinates[1]):
 		game_over()
 	else:
 		window.after(SPEED, next_turn, snake, food)
@@ -154,6 +164,7 @@ if __name__ == '__main__':
 
 	snake = Snake()
 	food = Food()
+	bomb = Bomb()
 
 	next_turn(snake, food)
 
