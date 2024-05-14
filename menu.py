@@ -39,7 +39,6 @@ def clicked_play_btn():
     os.system('python play.py')
     exit(window_menu)
 
-
 if __name__ == '__main__':
 
     window_menu = Tk()
@@ -146,7 +145,7 @@ if __name__ == '__main__':
     exit_btn = ttk.Button(text="Выйти", command=clicked_exit_btn, cursor="X_cursor")
     exit_btn.place(relx=0.5, rely=0.7, anchor="c", width=200, height=70)
 
-    #setting_speed_btn = ttk.Button(text="⚙️")
+    #setting_speed_btn = ttk.Button(text="⚙️", command=setting_speed)
     #setting_speed_btn.place(relx=0.95, rely=0.95, anchor="c", width=70, height=70)
 
     window_menu.mainloop()

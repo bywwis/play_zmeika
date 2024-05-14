@@ -3,6 +3,7 @@ from tkinter import ttk
 import random
 import os
 
+
 WIDTH = 1400
 HEIGHT = 800
 SPEED = 100
@@ -51,7 +52,8 @@ class Bomb:
 
 		area.create_oval(x, y, x + SPACE_SIZE, y + SPACE_SIZE, fill='red', tag="bomb")
 
-def next_turn(snake, food):
+
+def next_turn(snake, food, bomb):
 
 	x, y = snake.coordinates[0]
 
@@ -75,7 +77,8 @@ def next_turn(snake, food):
 		counter.config(text="Счёт: {}".format(score))
 		area.delete("food")
 		food = Food()
-		Bomb()
+		area.delete("bomb")
+		bomb = Bomb()
 
 	else:
 		del snake.coordinates[-1]
@@ -85,7 +88,8 @@ def next_turn(snake, food):
 	if check_collisions(snake) or (x == bomb.coordinates[0] and y == bomb.coordinates[1]):
 		game_over()
 	else:
-		window.after(SPEED, next_turn, snake, food)
+		window.after(SPEED, next_turn, snake, food, bomb)
+
 
 
 def change_direction(new_direction):
@@ -166,6 +170,6 @@ if __name__ == '__main__':
 	food = Food()
 	bomb = Bomb()
 
-	next_turn(snake, food)
+	next_turn(snake, food, bomb)
 
 	window.mainloop()
