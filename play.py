@@ -50,7 +50,7 @@ class Bomb:
 
 		self.coordinates = [x, y]
 
-		area.create_oval(x, y, x + SPACE_SIZE, y + SPACE_SIZE, fill='red', tag="bomb")
+		area.create_oval(x, y, x + SPACE_SIZE, y + SPACE_SIZE, fill=BOMB, tag="bomb")
 
 
 def next_turn(snake, food, bomb):
@@ -86,6 +86,7 @@ def next_turn(snake, food, bomb):
 		del snake.squares[-1]
 
 	if check_collisions(snake) or (x == bomb.coordinates[0] and y == bomb.coordinates[1]):
+		counter.config(text="Счёт: {}".format(score))
 		game_over()
 	else:
 		window.after(SPEED, next_turn, snake, food, bomb)
@@ -128,7 +129,7 @@ def check_collisions(snake):
 
 def game_over():
 	area.delete(ALL)
-	area.create_text(area.winfo_width() / 2, area.winfo_height() / 2, font=('Segoe print', 70), text="Игра окончена", fill="red", tag="gameover")
+	area.create_text(area.winfo_width() / 2, area.winfo_height() / 2, font=('Segoe print', 60), text=f"Игра окончена со счётом {score}", fill="red", tag="gameover")
 
 
 def go_back():
