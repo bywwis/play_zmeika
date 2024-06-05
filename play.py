@@ -3,7 +3,6 @@ from tkinter import ttk
 import random
 import os
 
-
 WIDTH = 1400
 HEIGHT = 800
 SPEED = 100
@@ -133,14 +132,13 @@ def game_over():
 
 
 def go_back():
+	window.destroy()
 	os.system('python menu.py')
-	exit(window)
 
 
 def restart_game():
-	os.system('python play.py')
-	exit(window)
-
+	window.destroy()
+	os.system("python play.py")
 
 if __name__ == '__main__':
 
