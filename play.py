@@ -6,7 +6,7 @@ import os
 WIDTH = 1400
 HEIGHT = 800
 SPEED = 100
-SPACE_SIZE = 20
+SPACE_SIZE = 25
 BODY_SIZE = 3
 SNAKE = "#F0FFFF"
 FOOD = "#00BFFF"
@@ -34,22 +34,30 @@ class Snake:
 
 class Food:
 	def __init__(self):
-		x = random.randint(0, (WIDTH / SPACE_SIZE) - 1) * SPACE_SIZE
-		y = random.randint(0, (HEIGHT / SPACE_SIZE) - 1) * SPACE_SIZE
+		x = random.randint(0, (WIDTH / SPACE_SIZE) - 5) * SPACE_SIZE
+		y = random.randint(0, (HEIGHT / SPACE_SIZE) - 5) * SPACE_SIZE
 
 		self.coordinates = [x, y]
 
 		area.create_oval(x, y, x + SPACE_SIZE, y + SPACE_SIZE, fill=FOOD, tag="food")
 
+		if x in snake.coordinates or y in snake.coordinates:
+			area.delete(food)
+			Food()
+
 
 class Bomb:
 	def __init__(self):
-		x = random.randint(0, (WIDTH / SPACE_SIZE) - 1) * SPACE_SIZE
-		y = random.randint(0, (HEIGHT / SPACE_SIZE) - 1) * SPACE_SIZE
+		x = random.randint(0, (WIDTH / SPACE_SIZE) - 5) * SPACE_SIZE
+		y = random.randint(0, (HEIGHT / SPACE_SIZE) - 5) * SPACE_SIZE
 
 		self.coordinates = [x, y]
 
 		area.create_oval(x, y, x + SPACE_SIZE, y + SPACE_SIZE, fill=BOMB, tag="bomb")
+
+		if x in snake.coordinates or y in snake.coordinates:
+			area.delete(bomb)
+			Bomb()
 
 
 def next_turn(snake, food, bomb):
@@ -139,6 +147,7 @@ def go_back():
 def restart_game():
 	window.destroy()
 	os.system("python play.py")
+
 
 if __name__ == '__main__':
 

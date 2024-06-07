@@ -1,3 +1,4 @@
+import sys
 from tkinter import *
 from tkinter import ttk
 import os
@@ -32,7 +33,8 @@ def clicked_rules_btn():
 
 
 def clicked_exit_btn():
-    exit()
+    window_menu.destroy()
+    sys.exit()
 
 
 def clicked_play_btn():
