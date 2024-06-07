@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 import random
-import os
+import subprocess
 
 WIDTH = 1400
 HEIGHT = 800
@@ -25,7 +25,7 @@ class Snake:
 		self.squares = []
 
 		for i in range(0, BODY_SIZE):
-			self.coordinates.append([100, 100])
+			self.coordinates.append([50, 50])
 
 		for x, y in self.coordinates:
 			square = area.create_rectangle(x, y, x + SPACE_SIZE, y + SPACE_SIZE, fill=SNAKE, tag="snake")
@@ -37,13 +37,12 @@ class Food:
 		x = random.randint(0, (WIDTH / SPACE_SIZE) - 5) * SPACE_SIZE
 		y = random.randint(0, (HEIGHT / SPACE_SIZE) - 5) * SPACE_SIZE
 
+		while [x, y] in snake.coordinates:
+			x = random.randint(0, (WIDTH / SPACE_SIZE) - 5) * SPACE_SIZE
+			y = random.randint(0, (HEIGHT / SPACE_SIZE) - 5) * SPACE_SIZE
+
 		self.coordinates = [x, y]
-
 		area.create_oval(x, y, x + SPACE_SIZE, y + SPACE_SIZE, fill=FOOD, tag="food")
-
-		if x in snake.coordinates or y in snake.coordinates:
-			area.delete(food)
-			Food()
 
 
 class Bomb:
@@ -51,13 +50,13 @@ class Bomb:
 		x = random.randint(0, (WIDTH / SPACE_SIZE) - 5) * SPACE_SIZE
 		y = random.randint(0, (HEIGHT / SPACE_SIZE) - 5) * SPACE_SIZE
 
+		while [x, y] in snake.coordinates:
+			x = random.randint(0, (WIDTH / SPACE_SIZE) - 5) * SPACE_SIZE
+			y = random.randint(0, (HEIGHT / SPACE_SIZE) - 5) * SPACE_SIZE
+
 		self.coordinates = [x, y]
 
 		area.create_oval(x, y, x + SPACE_SIZE, y + SPACE_SIZE, fill=BOMB, tag="bomb")
-
-		if x in snake.coordinates or y in snake.coordinates:
-			area.delete(bomb)
-			Bomb()
 
 
 def next_turn(snake, food, bomb):
@@ -97,7 +96,6 @@ def next_turn(snake, food, bomb):
 		game_over()
 	else:
 		window.after(SPEED, next_turn, snake, food, bomb)
-
 
 
 def change_direction(new_direction):
@@ -140,13 +138,14 @@ def game_over():
 
 
 def go_back():
+	subprocess.run(["menu.exe"])
 	window.destroy()
-	os.system('python menu.py')
+	exit()
 
 
 def restart_game():
+	subprocess.run(["play.exe"])
 	window.destroy()
-	os.system("python play.py")
 
 
 if __name__ == '__main__':

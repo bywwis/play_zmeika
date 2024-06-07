@@ -1,7 +1,7 @@
 import sys
 from tkinter import *
 from tkinter import ttk
-import os
+import subprocess
 from PIL import Image, ImageTk
 
 
@@ -39,7 +39,7 @@ def clicked_exit_btn():
 
 def clicked_play_btn():
     window_menu.destroy()
-    os.system("python play.py")
+    subprocess.run(["play.exe"])
 
 
 if __name__ == '__main__':
